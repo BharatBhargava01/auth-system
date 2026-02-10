@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="auth-card success-card">
+            <div class="success-icon">✓</div>
+            <h1>Welcome</h1>
+            <p class="subtitle">You're signed in</p>
+
+            <div id="userInfo" class="user-info">
+                <div class="user-avatar" id="userAvatar">👤</div>
+                <div>
+                    <p class="user-email" id="userEmail">Loading...</p>
+                    <p class="user-provider" id="userProvider"></p>
+                </div>
+            </div>
+
+            <a href="/api/auth/logout" class="btn-primary btn-logout">Sign out</a>
+        </div>
+    </div>
+
+    <script>
+        fetch('/api/auth/status')
+            .then(r => r.json())
+            .then(d => {
+                if (d.authenticated) {
+                    document.getElementById('userEmail').textContent = d.user.name || d.user.email;
+                    document.getElementById('userProvider').textContent = d.user.provider;
+                    if (d.user.avatar) {
+                        document.getElementById('userAvatar').innerHTML = `<img src="${d.user.avatar}" alt="">`;
+                    }
+                } else {
+                    window.location.href = '/login.html';
+                }
+            });
+    </script>
+</body>
+</html>
