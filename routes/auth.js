@@ -25,7 +25,15 @@ router.post('/register', async (req, res) => {
         });
 
         await user.save();
-        res.status(201).json({ message: 'User registered successfully' });
+
+        // Auto-login after registration
+        req.login(user, (loginErr) => {
+            if (loginErr) {
+                console.error('Session login error:', loginErr);
+                return res.status(201).json({ message: 'User registered successfully' });
+            }
+            res.status(201).json({ message: 'User registered successfully', userId: user._id });
+        });
 
     } catch (err) {
         console.error(err);
@@ -50,7 +58,14 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Invalid email or password' });
         }
 
-        res.json({ message: 'Login successful', userId: user._id });
+        // Establish session
+        req.login(user, (loginErr) => {
+            if (loginErr) {
+                console.error('Session login error:', loginErr);
+                return res.status(500).json({ message: 'Login failed' });
+            }
+            res.json({ message: 'Login successful', userId: user._id });
+        });
 
     } catch (err) {
         console.error(err);

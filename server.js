@@ -6,6 +6,8 @@ const connectDB = require('./config/db');
 const passport = require('./config/passport');
 const authRoutes = require('./routes/auth');
 const oauthRoutes = require('./routes/oauth');
+const phoneAuthRoutes = require('./routes/phone-auth');
+const passwordResetRoutes = require('./routes/password-reset');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -38,6 +40,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/auth', oauthRoutes);
+app.use('/api/auth', phoneAuthRoutes);
+app.use('/api/auth', passwordResetRoutes);
 
 // Serve login page
 app.get('/', (req, res) => {

@@ -73,6 +73,7 @@ router.get('/status', (req, res) => {
             user: {
                 id: req.user._id,
                 email: req.user.email,
+                phone: req.user.phone,
                 name: req.user.name,
                 avatar: req.user.avatar,
                 provider: req.user.provider

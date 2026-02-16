@@ -77,6 +77,130 @@ h1 {
   background: #1a1a1a;
 }
 
+/* ===== Auth Tabs (Email / Phone) ===== */
+.auth-tabs {
+  display: flex;
+  background: #141414;
+  border: 1px solid #262626;
+  border-radius: 10px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px 0;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #666;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.tab-btn.active {
+  background: #262626;
+  color: #fff;
+}
+
+.tab-btn:hover:not(.active) {
+  color: #999;
+}
+
+/* Tab content visibility */
+.tab-content {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tab-content.active {
+  display: flex;
+}
+
+/* ===== Phone input + Send Code button ===== */
+.phone-group {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.phone-group input {
+  flex: 1;
+  min-width: 0;
+}
+
+.btn-send-otp {
+  padding: 14px 16px;
+  background: #262626;
+  border: 1px solid #333;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.btn-send-otp:hover:not(:disabled) {
+  background: #333;
+  border-color: #444;
+}
+
+.btn-send-otp:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* OTP boxes */
+.otp-group {
+  transition: all 0.3s ease;
+}
+
+.otp-group.hidden {
+  display: none;
+}
+
+.otp-boxes {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.otp-digit {
+  width: 46px;
+  height: 54px;
+  background: #141414;
+  border: 1px solid #262626;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  font-family: inherit;
+  text-align: center;
+  caret-color: #fff;
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    box-shadow 0.2s;
+}
+
+.otp-digit:focus {
+  outline: none;
+  border-color: #555;
+  background: #1a1a1a;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06);
+}
+
+.otp-digit.filled {
+  border-color: #444;
+}
+
 /* Button */
 .btn-primary {
   width: 100%;
@@ -192,6 +316,55 @@ h1 {
 
 .toggle-text a:hover {
   text-decoration: underline;
+}
+
+/* Forgot Password */
+.forgot-link {
+  text-align: right;
+  margin-top: 2px;
+  font-size: 13px;
+}
+
+.forgot-link a {
+  color: #666;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.forgot-link a:hover {
+  color: #fff;
+}
+
+.back-to-login {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 13px;
+}
+
+.back-to-login a {
+  color: #666;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.back-to-login a:hover {
+  color: #fff;
+}
+
+.step-label {
+  color: #888;
+  font-size: 13px;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+#forgotStep1 .input-group,
+#forgotStep3 .input-group {
+  margin-bottom: 16px;
 }
 
 /* Success Page */

@@ -31,7 +31,7 @@
             .then(r => r.json())
             .then(d => {
                 if (d.authenticated) {
-                    document.getElementById('userEmail').textContent = d.user.name || d.user.email;
+                    document.getElementById('userEmail').textContent = d.user.name || d.user.email || d.user.phone || 'User';
                     document.getElementById('userProvider').textContent = d.user.provider;
                     if (d.user.avatar) {
                         document.getElementById('userAvatar').innerHTML = `<img src="${d.user.avatar}" alt="">`;
