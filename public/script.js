@@ -6,8 +6,66 @@ const formTitle = document.getElementById('formTitle');
 const formSubtitle = document.getElementById('formSubtitle');
 const toggleLink = document.getElementById('toggleLink');
 const toggleQuestion = document.getElementById('toggleQuestion');
+const registerEmailInput = document.getElementById('loginEmail');
+const registerPasswordInput = document.getElementById('loginPassword');
+const passwordScoreLabel = document.getElementById('passwordScoreLabel');
+const passwordScoreFill = document.getElementById('passwordScoreFill');
+const passwordTips = document.getElementById('passwordTips');
 
 let isLoginMode = true;
+
+function getStrengthColor(score) {
+    if (score >= 80) return 'linear-gradient(90deg, #00c853, #69f0ae)';
+    if (score >= 60) return 'linear-gradient(90deg, #64dd17, #c6ff00)';
+    if (score >= 40) return 'linear-gradient(90deg, #ffb300, #ffe082)';
+    return 'linear-gradient(90deg, #ff5252, #ff8a80)';
+}
+
+function updatePasswordInsights(analysis) {
+    passwordScoreLabel.textContent = `Strength: ${analysis.label} (${analysis.score}/100)`;
+    passwordScoreFill.style.width = `${analysis.score}%`;
+    passwordScoreFill.style.background = getStrengthColor(analysis.score);
+
+    const tips = analysis.suggestions && analysis.suggestions.length
+        ? analysis.suggestions
+        : ['Great password hygiene. You are good to go.'];
+
+    passwordTips.innerHTML = tips.map(tip => `<li>${tip}</li>`).join('');
+}
+
+let advisorTimer;
+async function requestPasswordFeedback() {
+    const payload = {
+        email: registerEmailInput.value.trim(),
+        password: registerPasswordInput.value
+    };
+
+    try {
+        const res = await fetch('/api/auth/security/password-feedback', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+            return;
+        }
+
+        const data = await res.json();
+        if (data.analysis) {
+            updatePasswordInsights(data.analysis);
+        }
+    } catch {
+        // Ignore transient feedback failures; registration still validates server-side.
+    }
+}
+
+[registerEmailInput, registerPasswordInput].forEach((input) => {
+    input.addEventListener('input', () => {
+        clearTimeout(advisorTimer);
+        advisorTimer = setTimeout(requestPasswordFeedback, 200);
+    });
+});
 
 // ===== Tab Switching (Email / Phone) =====
 document.querySelectorAll('.auth-tabs .tab-btn').forEach(btn => {
@@ -308,7 +366,8 @@ registerForm.addEventListener('submit', async (e) => {
         const data = await res.json();
 
         if (res.ok) {
-            showMessage('Account created!', 'success');
+            showMessage(`Account created! ${data.passwordSecurity ? `Password rating: ${data.passwordSecurity.label}.` : ''}`, 
+                'success');
             setTimeout(() => window.location.href = '/success.html', 800);
         } else {
             showMessage(data.message, 'error');
@@ -454,6 +513,9 @@ document.getElementById('forgotVerifyOtp').addEventListener('click', async () =>
             formSubtitle.textContent = 'Choose your new password.';
             document.getElementById('newPassword').focus();
         } else {
+            if (data.analysis) {
+                updatePasswordInsights(data.analysis);
+            }
             showMessage(data.message, 'error');
         }
     } catch {
@@ -488,6 +550,9 @@ forgotForm.addEventListener('submit', async (e) => {
             showMessage('Password reset! Redirecting to sign in...', 'success');
             setTimeout(() => backToLogin.click(), 1500);
         } else {
+            if (data.analysis) {
+                updatePasswordInsights(data.analysis);
+            }
             showMessage(data.message, 'error');
         }
     } catch {

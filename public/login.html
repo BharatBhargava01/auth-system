@@ -48,6 +48,24 @@
                 required
               />
             </div>
+            <div class="input-group">
+              <input
+                type="password"
+                id="confirmPassword"
+                placeholder="Confirm password"
+                required
+              />
+            </div>
+            <div class="ai-security-panel" id="aiSecurityPanel">
+              <p class="ai-security-title">Security advisor</p>
+              <p class="ai-security-score" id="passwordScoreLabel">Strength: Very weak (0/100)</p>
+              <div class="ai-security-meter">
+                <div class="ai-security-meter-fill" id="passwordScoreFill"></div>
+              </div>
+              <ul class="ai-security-tips" id="passwordTips">
+                <li>Use at least 12 characters with mixed symbols and numbers.</li>
+              </ul>
+            </div>
           </div>
 
           <!-- Phone fields -->

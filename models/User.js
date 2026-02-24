@@ -38,6 +38,28 @@ const userSchema = new mongoose.Schema({
   providerId: {
     type: String
   },
+  security: {
+    failedLoginAttempts: {
+      type: Number,
+      default: 0
+    },
+    lastFailedLoginAt: {
+      type: Date,
+      default: null
+    },
+    lockUntil: {
+      type: Date,
+      default: null
+    },
+    lastLoginIp: {
+      type: String,
+      default: null
+    },
+    lastLoginUserAgent: {
+      type: String,
+      default: null
+    }
+  },
   createdAt: {
     type: Date,
     default: Date.now,
